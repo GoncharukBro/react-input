@@ -1,0 +1,60 @@
+{
+  "name": "@react-input/mask",
+  "version": "1.0.1",
+  "author": "Nikolay Goncharuk <goncharuk.bro@gmail.com>",
+  "description": "React input component for masked input.",
+  "keywords": [
+    "react",
+    "react component",
+    "react hook",
+    "input",
+    "text field",
+    "mask",
+    "masked",
+    "format",
+    "pattern",
+    "replace"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoncharukBro/react-input.git",
+    "directory": "packages/mask"
+  },
+  "bugs": {
+    "url": "https://github.com/GoncharukBro/react-input/issues"
+  },
+  "homepage": "https://github.com/GoncharukBro/react-input/tree/main/packages/mask#readme",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./*": "./dist/*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rollup --config rollup.config.ts --configPlugin typescript"
+  },
+  "peerDependencies": {
+    "@types/react": ">=16.8",
+    "react": ">=16.8",
+    "react-dom": ">=16.8"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "plugin:react-hooks/recommended", "airbnb", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint"],
+  "rules": {
+    "arrow-body-style": 0,
+    "camelcase": 0,
+    "consistent-return": 1,
+    "default-case": 0,
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+    "import/prefer-default-export": 0,
+    "max-classes-per-file": 0,
+    "no-plusplus": 0,
+    "no-nested-ternary": 0,
+    "no-undef": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": [1, { "args": "none" }],
+    "no-use-before-define": 0,
+    "react/function-component-definition": 0,
+    "react/jsx-filename-extension": [2, { "extensions": [".jsx", ".tsx"] }],
+    "react/jsx-props-no-spreading": 0,
+    "react/jsx-uses-react": 0,
+    "react/react-in-jsx-scope": 0,
+    "react/require-default-props": 0
+  }
+}
