@@ -21,7 +21,7 @@ function createRollupConfig(env, config) {
   return {
     ...config,
     output: output[env],
-    external: ['react', 'react-dom', /^@react-input\/core.*/],
+    external: ['react', 'react-dom', 'react/jsx-runtime', /^@react-input\/core.*/],
     plugins: [
       nodeResolve(),
       commonjs(),
