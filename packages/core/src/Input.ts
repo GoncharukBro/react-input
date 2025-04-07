@@ -25,6 +25,7 @@ export default class Input<T = unknown> {
 
   constructor({ init, tracking }: InputOptions<T>) {
     const handlersMap = new WeakMap<HTMLInputElement, ContextValue>();
+    const descriptorMap = new WeakMap<HTMLInputElement, PropertyDescriptor | undefined>();
 
     this.register = (element) => {
       if (!ALLOWED_TYPES.includes(element.type)) {
@@ -72,6 +73,7 @@ export default class Input<T = unknown> {
       // Поскольку значение элемента может быть изменено вне текущей логики,
       // нам важно перехватывать каждое изменение для обновления `tracker.value`.
       // `tracker.value` служит заменой `_valueTracker.getValue()` предоставляемый React.
+      descriptorMap.set(element, descriptor);
       Object.defineProperty(element, 'value', {
         ...descriptor,
         set: (value: string) => {
@@ -240,6 +242,16 @@ export default class Input<T = unknown> {
     };
 
     this.unregister = (element) => {
+      const descriptor = descriptorMap.get(element);
+
+      if (descriptor !== undefined) {
+        const { value } = element;
+
+        Object.defineProperty(element, 'value', descriptor);
+        descriptorMap.delete(element);
+        element.value = value;
+      }
+
       const handlers = handlersMap.get(element);
 
       if (handlers !== undefined) {
