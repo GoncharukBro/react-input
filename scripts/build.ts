@@ -48,7 +48,7 @@ execSync('rollup --config ../../rollup.config.js');
  */
 
 execSync(
-  `tsc src/index.ts ${npm_package_name === '@react-input/core' ? '--removeComments' : ''} --declaration --emitDeclarationOnly --esModuleInterop --jsx react --rootDir src --outDir @types`,
+  `tsc src/index.ts ${npm_package_name === '@react-input/core' ? '--removeComments' : ''} --declaration --emitDeclarationOnly --esModuleInterop --jsx react --rootDir src --outDir @types --skipLibCheck`,
 );
 
 /**
