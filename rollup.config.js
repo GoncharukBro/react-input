@@ -1,3 +1,4 @@
+import transformRuntime from '@babel/plugin-transform-runtime';
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
@@ -81,8 +82,9 @@ const plugins = (/** @type {'cdn'|'react'} */ output) => [
   commonjs(),
   babel({
     root: '../..',
-    babelHelpers: 'bundled',
+    babelHelpers: 'runtime',
     extensions: EXTENSIONS,
+    plugins: [transformRuntime],
   }),
   terser(),
 ];
