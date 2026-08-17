@@ -7,6 +7,7 @@ const ALLOWED_TYPES = ['text', 'email', 'tel', 'search', 'url'];
 interface ContextValue {
   onFocus: (event: FocusEvent) => void;
   onBlur: (event: FocusEvent) => void;
+  onBeforeInput: (event: Event) => void;
   onInput: (event: Event) => void;
 }
 
@@ -63,6 +64,11 @@ export default class Input<T = unknown> {
         selectionEnd: 0,
       };
 
+      // `beforeinput` gives the true pre-edit selection synchronously, skipping the poll.
+      const beforeInput = {
+        fresh: false,
+      };
+
       // Важно сохранить дескриптор создаваемый React
       const descriptor = Object.getOwnPropertyDescriptor(
         '_valueTracker' in element ? element : HTMLInputElement.prototype,
@@ -107,6 +113,17 @@ export default class Input<T = unknown> {
 
         timeout.id = -1;
         timeout.cachedId = -1;
+        beforeInput.fresh = false;
+      };
+
+      /**
+       * Handle before input
+       */
+      const onBeforeInput = () => {
+        tracker.selectionStart = element.selectionStart ?? 0;
+        tracker.selectionEnd = element.selectionEnd ?? 0;
+
+        beforeInput.fresh = true;
       };
 
       /**
@@ -114,9 +131,11 @@ export default class Input<T = unknown> {
        */
       const onInput = (event: Event) => {
         try {
-          // Если событие вызывается слишком часто, смена курсора может не поспеть за новым событием,
-          // поэтому сравниваем `timeoutId` кэшированный и текущий для избежания некорректного поведения маски
-          if (timeout.cachedId === timeout.id) {
+          if (beforeInput.fresh) {
+            beforeInput.fresh = false;
+          } else if (timeout.cachedId === timeout.id) {
+            // If the event fires too often, the selection poll may not have caught up yet,
+            // so we compare the cached and current timeoutId to avoid incorrect mask behavior.
             throw new SyntheticChangeError('The input selection has not been updated.');
           }
 
@@ -234,9 +253,10 @@ export default class Input<T = unknown> {
 
       element.addEventListener('focus', onFocus);
       element.addEventListener('blur', onBlur);
+      element.addEventListener('beforeinput', onBeforeInput);
       element.addEventListener('input', onInput);
 
-      handlersMap.set(element, { onFocus, onBlur, onInput });
+      handlersMap.set(element, { onFocus, onBlur, onBeforeInput, onInput });
     };
 
     this.unregister = (element) => {
@@ -245,6 +265,7 @@ export default class Input<T = unknown> {
       if (handlers !== undefined) {
         element.removeEventListener('focus', handlers.onFocus);
         element.removeEventListener('blur', handlers.onBlur);
+        element.removeEventListener('beforeinput', handlers.onBeforeInput);
         element.removeEventListener('input', handlers.onInput);
 
         handlersMap.delete(element);
